@@ -1,0 +1,11 @@
+ /*-----------------------------------------*
+ * send outbound email attached to account  *
+ *-----------------------------------------/*
+ 
+ function sendEmail(email, messageSubject, messageHtmlBody){
+  MailApp.sendEmail({
+    to: email, 
+    subject: messageSubject, 
+    htmlBody: messageHtmlBody
+  }); 
+}

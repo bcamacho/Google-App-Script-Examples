@@ -1,0 +1,11 @@
+/*--------*
+ *  Menu  *
+ *--------*/
+function onOpen() {
+  var ui = SpreadsheetApp.getUi();
+  ui.createMenu('*** Blitz Menu ***')
+      .addItem('[FunctionName]', 'function')
+      .addItem(''[FunctionName]', 'function')
+      .addItem('[FunctionName]', 'function')
+      .addToUi();
+}

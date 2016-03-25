@@ -1,0 +1,15 @@
+/*------------------------------------*
+ *  Return array with positive values *
+ *------------------------------------*/
+function filteredValues(data){
+  var filteredData = [];
+  for(var i=0;i<data.length;i++){
+    var a = data[i];
+    if(a[0] != 0){
+      if(a[0] != '#N/A'){
+      filteredData.push(a[0]);
+      }
+    }
+  }
+  return filteredData;
+}

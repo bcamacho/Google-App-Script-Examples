@@ -1,0 +1,12 @@
+/**
+ * Get last row, requires sheetname
+ */
+function getFirstEmptyRowWholeRow(sheetName) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName); 
+  var values = sheet.getDataRange().getValues();
+  var row = 0;
+  for (var row=0; row<values.length; row++) {
+    if (!values[row].join("")) break;
+  }
+  return (row);
+}

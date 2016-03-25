@@ -1,0 +1,28 @@
+/**
+ * Enhances Google Sheets' native "query" method.  Allows you to specify column-names instead of using the column letters in the SQL statement (no spaces allowed in identifiers)
+ * 
+ * Sample : =query(data!A1:I,SQL("data!A1:I1","SELECT Owner-Name,Owner-Email,Type,Account-Name",false),true)
+ *  
+ * Params : useColNums (boolean) : false/default = generate "SELECT A, B, C" syntax 
+ *                                 true = generate "SELECT Col1, Col2, Col3" syntax
+ */
+function SQL(rangeName, queryString, useColNums){
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var range = ss.getRange(rangeName);
+  var row = range.getValues()[0];
+  
+  for (var i=0; i<row.length; i++) {
+    if (row[i].length < 1) continue;
+    var re = new RegExp("\\b"+row[i]+"\\b","gm");
+    if (useColNums) {
+      var columnName="Col"+Math.floor(i+1);
+      queryString = queryString.replace(re,columnName);
+    }
+    else {
+      var columnLetter=range.getCell(1,i+1).getA1Notation().split(/[0-9]/)[0];
+      queryString = queryString.replace(re,columnLetter);
+    }
+  }
+  //Logger.log(queryString);
+  return queryString;
+}

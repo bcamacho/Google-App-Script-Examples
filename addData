@@ -1,0 +1,12 @@
+/**
+ * Add data
+ * example: addData('EmailLog','2dArrayOfValues');  // Make sure you provide sheetname
+ */
+function addData(sheetName, values) {
+  var ss=SpreadsheetApp.getActiveSpreadsheet();
+  var s=ss.getSheetByName(sheetName);
+  var lastValue = getFirstEmptyRowWholeRow(sheetName);
+  var currentRow = lastValue+1;
+  var range = s.getRange(currentRow,1,values.length,values[0].length);
+  range.setValues(values);
+};
