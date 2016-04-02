@@ -1,14 +1,28 @@
-/*-----------------------------------------------------
-| Compare previousDate to todays value using daysRange |
--------------------------------------------------------
+/*---------------
+| Compare dates |
+-----------------
      Example:
 
-     isPreviousDateGreaterThan(7, '3/13/2016') -> return true
+     Check if date is older than 7 days
+       -> isDateGreaterThan(7, '3/13/2016') -> return true
+     Compare two dates
+       -> isDateGreaterThan(0, '3/13/2016', '3/14/2016') -> return false
+
 */
-function isPreviousDateGreaterThan(daysRange, previousDate){
-    var previousDate = new Date(previousDate);
+function isDateGreaterThan(daysRange, date1, date2){
+    var date1 = new Date(date1);
+    var date2 = new Date(date2);
     var todayDate = new Date();
-  if(DateDiff.inDays(todayDate, previousDate)*-1>daysRange){
+  
+  if(daysRange === 0 && date2 !== null){
+    if(DateDiff.inDays(todayDate, date1)*-1<DateDiff.inDays(todayDate, date2)*-1){
+      return true;
+    }
+    return false
+  }
+  
+
+  if(DateDiff.inDays(todayDate, date1)*-1>daysRange){
     return true;
   }
   return false;
