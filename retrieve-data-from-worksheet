@@ -1,0 +1,90 @@
+/*------------------------------------------------
+| Get object with column values within worksheet |
+--------------------------------------------------
+Example:
+  var columnNames = ['last_response_status','email'];
+  var workSheetName = 'Tracker';
+  var objects = getColumnValues(workSheetName, columnNames);
+  for(var val in objects){
+    var columnName = objects[val].columnName;
+    var values = objects[val].values;
+    Logger.log(columnName + " : " + values); 
+  }
+*/
+
+// Alphabet array to compare numeric to alpha
+var alphabet =['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','BB','CC','DD','EE','FF','GG','HH','II','JJ','KK','LL','MM','NN','OO','PP','QQ','RR','SS','TT','UU','VV','WW','XX','YY','ZZ'];
+
+
+function getColumnValues(sheetName, columnNames, filtered){
+  // Define varibles
+  var generatedValues = [];
+  var ss=SpreadsheetApp.getActiveSpreadsheet();
+  var s=ss.getSheetByName(sheetName);
+  var v=s.getDataRange().getValues();
+  var data = [];
+  
+  // Loop through columns to discover columnNames and ids to object then push to data array
+  for (var i=0;i<v[0].length;i++){
+      for (var val in columnNames){
+        if(v[0][i] === columnNames[val])
+        data.push({
+          columnName:columnNames[val],
+          location: i
+        });
+      }
+    }
+//  Logger.log(data);
+  // Obtain values from data range then insert into generatedValues array
+  for (var val in data){
+    generatedValues.push({
+      columnName:data[val].columnName,
+      values:getValueRange(SpreadsheetApp.getActiveSpreadsheet().getId(), sheetName, alphabet[data[val].location]+'2:'+alphabet[data[val].location], filtered)
+    });
+  }
+  
+//  Logger.log(generatedValues);
+  return generatedValues;
+}
+
+/*--------------------------------
+|  Return worksheet range values |
+----------------------------------
+
+Exmple: getValueRange('spreadsheetId','worksheetName', 'A2:A');
+
+  - sheetId = spreadsheet id
+  - workSheetName = worksheet name
+  - range = "A2:A"  (data range) */
+
+function getValueRange(sheetId, workSheetName, range, filtered) {
+  var sheet = SpreadsheetApp.openById(sheetId);
+  var workSheet = sheet.getSheetByName(workSheetName);
+  var dataRange = new function(filtered){
+  // Logger.log('Filtering is '+filtered);
+
+    if(filtered){ 
+      return filteredValues(workSheet.getRange(range).getDisplayValues());
+    } else {
+      return workSheet.getRange(range).getDisplayValues();
+    }
+  }(filtered);
+  // Logger.log(dataRange);
+  return dataRange;
+}
+
+/*------------------------------------
+|  Return array with positive values |
+------------------------------------*/
+function filteredValues(data){
+  var filteredData = [];
+  for(var i=0;i<data.length;i++){
+    var a = data[i];
+    if(a[0] != 0){
+      if(a[0] != '#N/A'){
+      filteredData.push(a[0]);
+      }
+    }
+  }
+  return filteredData;
+}
